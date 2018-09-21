@@ -1,0 +1,817 @@
+ALTER TABLE LOG4NETLOG
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE LOG4NETLOG CASCADE CONSTRAINTS;
+
+CREATE TABLE LOG4NETLOG
+(
+  LOG_ID         INTEGER,
+  LOG_DATE       TIMESTAMP(6),
+  LOG_THREAD     VARCHAR2(255 BYTE),
+  LOG_LEVEL      VARCHAR2(50 BYTE),
+  LOG_LOGGER     VARCHAR2(255 BYTE),
+  LOG_MESSAGE    VARCHAR2(4000 BYTE),
+  LOG_EXCEPTION  VARCHAR2(4000 BYTE),
+  LOG_SOURCE     VARCHAR2(1000 BYTE)
+)
+TABLESPACE "Informaticat1"
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+CREATE UNIQUE INDEX LOG4NETLOG_PK ON LOG4NETLOG
+(LOG_ID)
+LOGGING
+TABLESPACE "Informaticat1"
+PCTFREE    10
+INITRANS   2
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+NOPARALLEL;
+
+
+ALTER TABLE LOG4NETLOG ADD (
+  CONSTRAINT LOG4NETLOG_PK
+  PRIMARY KEY
+  (LOG_ID)
+  USING INDEX LOG4NETLOG_PK
+  ENABLE VALIDATE);
+
+
+DROP TABLE SVC_EVENT_MAIL CASCADE CONSTRAINTS;
+
+CREATE TABLE SVC_EVENT_MAIL
+(
+  C_EVENT_ID       VARCHAR2(30 BYTE)            NOT NULL,
+  C_EVENT_GROUPID  VARCHAR2(20 BYTE),
+  C_EVENT_NAME     VARCHAR2(50 BYTE),
+  C_MAIL_GROUPID   VARCHAR2(14 BYTE),
+  C_UPD_UID        VARCHAR2(10 BYTE),
+  C_UPD_DATE       DATE,
+  C_MAIL_SUBJECT   VARCHAR2(250 BYTE),
+  C_MAIL_TEMPLATE  VARCHAR2(4000 BYTE),
+  C_IS_BODY_HTML   VARCHAR2(1 BYTE),
+  C_SYS_ID         VARCHAR2(30 BYTE)
+)
+TABLESPACE "Informaticat1"
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+DROP TABLE SVC_MAIL CASCADE CONSTRAINTS;
+
+CREATE TABLE SVC_MAIL
+(
+  C_MAIL_ID  VARCHAR2(20 BYTE)                  NOT NULL,
+  C_MAIL     VARCHAR2(50 BYTE),
+  C_NAME     VARCHAR2(50 BYTE)
+)
+TABLESPACE "Informaticat1"
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+DROP TABLE SVC_MAILGROUP CASCADE CONSTRAINTS;
+
+CREATE TABLE SVC_MAILGROUP
+(
+  C_GROUP_ID    VARCHAR2(20 BYTE)               NOT NULL,
+  C_GROUP_NAME  VARCHAR2(50 BYTE)
+)
+TABLESPACE "Informaticat1"
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+DROP TABLE SVC_MAILGROUP_ITEM CASCADE CONSTRAINTS;
+
+CREATE TABLE SVC_MAILGROUP_ITEM
+(
+  C_GROUP_ID  VARCHAR2(20 BYTE)                 NOT NULL,
+  C_MAIL_ID   VARCHAR2(20 BYTE)                 NOT NULL
+)
+TABLESPACE "Informaticat1"
+RESULT_CACHE (MODE DEFAULT)
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+            FLASH_CACHE      DEFAULT
+            CELL_FLASH_CACHE DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+SET DEFINE OFF;
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSBOND40_FINISH', 'FITSBOND', '債券評價FITS處理完成', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:10', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<債券>評價流程-FITS回覆完成', '受文者 您好:
+	
+	版次[$dataFlow.SubjectNo$]資料處理, 已經由FITS回覆已處理完成。
+	
+	請知悉。
+	
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSBOND45_ERRFITS', 'FITSBOND', '債券評價FITS處理錯誤', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:10', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<債券>評價流程-FITS回覆錯誤', '受文者 您好:
+	
+	收到FITS回覆版次[$dataFlow.SubjectNo$]資料處理不正確。
+	詳細的錯誤內容如下:
+	
+	錯誤代碼:  $ReturnCode$
+	錯誤訊息:  $ResultMessage$
+
+	請知悉。
+	
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSFUND10_RCVESB ', 'FITSFUND', '基金評價電文接收處理完成', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:25', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<基金>評價流程-電文接收處理通知-#成功#', '受文者 您好:
+  <<基金債資料處理流程-FITS電文接收通知>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $detail$
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSFUND15_ERRRCV', 'FITSFUND', '基金評價電文接收處理錯誤', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:25', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<基金>評價流程-電文接收處理通知-#錯誤#', '受文者 您好:
+  <<基金評價資料處理流程-FITS電文接收通知>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $detail$
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSFUND20_CHECKED', 'FITSFUND', '基金評價經辦送出主管審核', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:25', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<基金>評價流程-經辦處理完成', '受文者 您好:
+  <<基金評價資料處理作業-經辦處理狀態通知>> 
+  
+  經辦人員:  $user.Name$
+  流程版次:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $dataFlow.Result$
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSFUND21_REJECT', 'FITSFUND', '基金評價主管退回', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:25', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<基金>評價流程-主管退回給經辦', '受文者 您好:
+  
+  $user.Name$ 主管人員退回<基金>評價行情資料資料版次[$dataFlow.SubjectNo$]審核，
+  請經辦人員接續處理。
+  
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSFUND30_SEND', 'FITSFUND', '基金評價主管送出', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:25', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<基金>評價流程-主管審核完成', '受文者 您好:
+  
+  $user.Name$ 主管人員已經完成FITS<基金>評價行情資料審核，
+  並已經將資料版次[$dataFlow.SubjectNo$]發送至FITS系統。
+  
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSFUND40_FINISH', 'FITSFUND', '基金評價FITS處理完成', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:25', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<基金>評價流程-FITS回覆完成', '受文者 您好:
+  
+  版次[$dataFlow.SubjectNo$]資料處理, 已經由FITS回覆已處理完成。
+  
+  請知悉。
+  
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSFUND45_ERRFITS', 'FITSFUND', '基金評價FITS處理錯誤', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:25', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<基金>評價流程-FITS回覆錯誤', '受文者 您好:
+	
+	收到FITS回覆版次[$dataFlow.SubjectNo$]資料處理不正確。
+	詳細的錯誤內容如下:
+	
+	錯誤代碼:  $ReturnCode$
+	錯誤訊息:  $ResultMessage$
+
+	請知悉。
+	
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITS_IRSCURVE_END', 'IRSCURVE', 'IRS月底作業-流程完成', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:35', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS IRS批次作業-處理通知-#完成#', '受文者 您好:
+  <<FITS IRS批次作業 $PROCESS_CODE$>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $dataFlow.ErrorCode$ :  $dataFlow.ErrorDesc$
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITS_IRSCURVE_ERROR', 'IRSCURVE', 'IRS月底作業-流程錯誤', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:35', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS IRS批次作業-處理通知-#錯誤#', '受文者 您好:
+  <<FITS IRS批次作業 $PROCESS_CODE$>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $dataFlow.ErrorCode$ :  $dataFlow.ErrorDesc$
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITS_IRSCURVE_START', 'IRSCURVE', 'IRS月底作業-流程開始', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:35', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS IRS批次作業-處理通知-#開始#', '無內文');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITS_IRSEFFECT_END', 'IRSEFFECT', 'IRS月初作業-流程完成', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:29:11', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS IRS批次作業-處理通知-#完成#', '受文者 您好:
+  <<FITS IRS批次作業 $PROCESS_CODE$>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $dataFlow.ErrorCode$ :  $dataFlow.ErrorDesc$
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITS_IRSEFFECT_ERROR', 'IRSEFFECT', 'IRS月初作業-流程錯誤', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:29:11', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS IRS批次作業-處理通知-#錯誤#', '受文者 您好:
+  <<FITS IRS批次作業 $PROCESS_CODE$>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $dataFlow.ErrorCode$ :  $dataFlow.ErrorDesc$
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITS_IRSEFFECT_START', 'IRSEFFECT', 'IRS月初作業-流程開始', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:29:11', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS IRS批次作業-處理通知-#開始#', '無內文');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_MAIL_SUBJECT, C_MAIL_TEMPLATE, C_IS_BODY_HTML, C_SYS_ID)
+ Values
+   ('TEST_EVENT', 'TEST', '測試', 'TIP_TIP3', '88888888', 
+    'HELLO', '<H1>受文者 您好:
+    
+    版次[$dataFlow.SubjectNo$]資料處理, 已經由系統回覆已處理完成。
+    
+    請知悉。
+    
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。</H1>', 'Y', 'TIP');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('INF_TASK_SUCCESS', 'INF', 'Informatica 成功', 'TIP', '88888888', 
+    '#TEST#【SOA-MAIL通知】INFORMATICA TASK SUCCESS', '88888');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_MAIL_SUBJECT, C_MAIL_TEMPLATE, C_SYS_ID)
+ Values
+   ('INF_TASK_TRIGGER_FAIL', 'INF', 'Informatica Task Trigger Fail', 'TIP', '88888888', 
+    '#TEST#【TIP Inf 批次Trigger 失敗通知】INF TASK TRIGGER FAIL', 'Quartz Scheduler 執行(com.fubon.batch.io.DataImportJob)發生錯誤
+ENV : $ENV$
+BATCH_GROUP_NAME : $BATCH_GROUP_NAME$
+CONFIG_NO : $CONFIG_NO$
+INF_WORK_FLOW : $INF_WORK_FLOW$
+      ERR_MSG : $ERR_MSG$', 'TIP_INF');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('INF_TASK_FIRE_FAIL', 'INF', 'Informatica Task Fire Fail', 'TIP', '88888888', 
+    '#TEST#【TIP Inf 批次Fire 失敗通知】INF TASK FIRE FAIL', 'Quartz Scheduler 執行(com.fubon.batch.io.DataImportTask)發生錯誤
+  REPORT_DATE : $REPORT_DATE$
+          ENV : $ENV$
+    CONFIG_NO : $CONFIG_NO$
+INF_WORK_FLOW : $INF_WORK_FLOW$
+       IS_SYN : $IS_SYN$
+    IS_MANUAL : $IS_MANUAL$
+      ERR_MSG : $ERR_MSG$');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_MAIL_SUBJECT, 
+    C_MAIL_TEMPLATE)
+ Values
+   ('MUXFEATURE_CHECKED', 'MUXFUTURE', 'Market Data Check經辦送出', 'MG201710010001', '#TEST#【MDP通知】<Market Data Check>檢核流程-經辦處理完成', 
+    '您好:
+	<<Market Data Check-經辦處理狀態通知>>
+
+	經辦人員:  $user.Name$
+	流程結果:  已完成檢核及確認，請主管人員接續進行覆核
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_MAIL_SUBJECT, 
+    C_MAIL_TEMPLATE)
+ Values
+   ('MUXFEATURE_REJECT', 'MUXFUTURE', 'Market Data Check主管退回', 'MG201710010001', '#TEST#【MDP通知】<Market Data Check>檢核流程-主管退回給經辦', 
+    '您好:
+
+  $user.Name$ 主管人員退回<Market Data Check>資料處理流程，
+  請經辦人員接續處理。
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_MAIL_SUBJECT, 
+    C_MAIL_TEMPLATE)
+ Values
+   ('MUXFEATURE_SEND', 'MUXFUTURE', 'Market Data Check主管送出', 'MG201710010001', '#TEST#【MDP通知】<Market Data Check>檢核流程-主管審核完成', 
+    '您好:
+
+	$user.Name$ 主管人員已經完成<Market Data Check>資料處理流程審核。
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_MAIL_SUBJECT, 
+    C_MAIL_TEMPLATE)
+ Values
+   ('MUXFEATURE_START_FAIL', 'MUXFUTURE', 'Market Data Check啟動有誤', 'MG201710010001', '#TEST#【MDP通知】<Market Data Check>檢核流程', 
+    '您好:
+
+  今日資料處理有誤(匯入來源無資料)，請經辦人員接續處理。
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_MAIL_SUBJECT, 
+    C_MAIL_TEMPLATE)
+ Values
+   ('MUXFEATURE_START_OK', 'MUXFUTURE', 'Market Data Check啟動完成', 'MG201710010001', '#TEST#【MDP通知】<Market Data Check>檢核流程', 
+    '您好:
+
+  今日資料處理已完成，請經辦人員接續處理。
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSBOND10_RCVESB', 'FITSBOND', '債券評價電文接收處理完成', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:10', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<債券>評價流程-電文接收處理通知-#成功#', '受文者 您好:
+  <<債券評價資料處理流程-FITS電文接收通知>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $detail$
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSBOND15_ERRRCV', 'FITSBOND', '債券評價電文接收處理錯誤', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:10', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<債券>評價流程-電文接收處理通知-#錯誤#', '受文者 您好:
+  <<債券評價資料處理流程-FITS電文接收通知>> 
+  
+  版次號碼:  $dataFlow.SubjectNo$
+  流程狀態:  $dataFlow.Status$
+  流程結果:  $detail$
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSBOND20_CHECKED', 'FITSBOND', '債券評價經辦送出主管審核', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:10', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<債券>評價流程-經辦處理完成', '受文者 您好:
+	<<債券評價資料處理作業-經辦處理狀態通知>> 
+	
+	經辦人員:  $user.Name$
+	流程版次:  $dataFlow.SubjectNo$
+	流程狀態:  $dataFlow.Status$
+	流程結果:  $dataFlow.Result$
+
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSBOND21_REJECT', 'FITSBOND', '債券評價主管退回', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:10', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<債券>評價流程-主管退回給經辦', '受文者 您好:
+  
+  $user.Name$ 主管人員退回<債券>評價行情資料資料版次[$dataFlow.SubjectNo$]審核，
+  請經辦人員接續處理。
+  
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+Insert into SVC_EVENT_MAIL
+   (C_EVENT_ID, C_EVENT_GROUPID, C_EVENT_NAME, C_MAIL_GROUPID, C_UPD_UID, 
+    C_UPD_DATE, C_MAIL_SUBJECT, C_MAIL_TEMPLATE)
+ Values
+   ('FITSBOND30_SEND', 'FITSBOND', '債券評價主管送出', 'MG201704270377', '641367', 
+    TO_DATE('04/27/2017 11:28:10', 'MM/DD/YYYY HH24:MI:SS'), '#TEST#【MDP通知】FITS<債券>評價流程-主管審核完成', '受文者 您好:
+	
+	$user.Name$ 主管人員已經完成FITS<債券>評價行情資料審核，
+	並已經將資料版次[$dataFlow.SubjectNo$]發送至FITS系統。
+	
+
+【註】此通知訊息由系統發出，請勿回覆此郵件。謝謝。');
+COMMIT;
+
+SET DEFINE OFF;
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('TIP_TIP3_1', 'tom.chan@fubon.com', 'tom(test)');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010001', 'johnny.lee@fubon.com', '李汪銘');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010002', 'jauyuan.liu@fubon.com', '劉兆袁');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010003', 'wilbert.huang@fubon.com', '黃偉瑜');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010004', 'pierre.hsieh@fubon.com', '謝宗翰');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010005', 'irwin.wang@fubon.com', '王郁仁');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010006', 'nash.chen@fubon.com', '陳增達');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010007', 'eleanor.chen@fubon.com', '陳亭均');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010008', 'chenghao.lin@fubon.com', '林政澔');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010009', 'kove.yao@fubon.com', '姚博文');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010010', 'chihchung.hsu@fubon.com', '許志忠');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201704010011', 'alfa.tai@fubon.com', '戴天華');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201708310390', 'jiaosi.huang@fubon.com', '黃教熙');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201708310391', 'leo.ming@fubon.com', '閔聿祥');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('MI201806210407', 'shihching.lin@fubon.com', '林士敬');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('TIP_1', 'hsienshu.huang@fbt.com', '顯舒(測試)');
+Insert into SVC_MAIL
+   (C_MAIL_ID, C_MAIL, C_NAME)
+ Values
+   ('TIP_2', 'nick.kt.chen@fbt.com', '冠廷(測試)');
+COMMIT;
+
+SET DEFINE OFF;
+Insert into SVC_MAILGROUP
+   (C_GROUP_ID, C_GROUP_NAME)
+ Values
+   ('TIP_TIP3', 'TIP(TEST)');
+Insert into SVC_MAILGROUP
+   (C_GROUP_ID, C_GROUP_NAME)
+ Values
+   ('TIP', 'TIP(測試)');
+Insert into SVC_MAILGROUP
+   (C_GROUP_ID, C_GROUP_NAME)
+ Values
+   ('MG201704270377', 'MM測試');
+Insert into SVC_MAILGROUP
+   (C_GROUP_ID, C_GROUP_NAME)
+ Values
+   ('MG201710010001', '外匯期貨流程通知');
+Insert into SVC_MAILGROUP
+   (C_GROUP_ID, C_GROUP_NAME)
+ Values
+   ('MG201704010001', 'MDP<債券>流程通知');
+Insert into SVC_MAILGROUP
+   (C_GROUP_ID, C_GROUP_NAME)
+ Values
+   ('MG201704010002', 'MDP<基金>流程通知');
+Insert into SVC_MAILGROUP
+   (C_GROUP_ID, C_GROUP_NAME)
+ Values
+   ('MG201704010003', 'IRS月初月底作業流程通知');
+COMMIT;
+SET DEFINE OFF;
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('TIP_TIP3', 'MI201806210407');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010001');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010002');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010003');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010004');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010005');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010006');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010007');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010008');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010009');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010010');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010001', 'MI201704010011');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010001');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010002');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010004');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010005');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010006');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010007');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010008');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010009');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010010');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010002', 'MI201704010011');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010001');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010002');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010003');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010004');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010005');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010006');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010007');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010008');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010009');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010010');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704010003', 'MI201704010011');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704270377', 'MI201704010010');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704270377', 'MI201704010011');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201704270377', 'MI201806210407');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('MG201710010001', 'MI201704010010');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('TIP', 'TIP_1');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('TIP', 'TIP_2');
+Insert into SVC_MAILGROUP_ITEM
+   (C_GROUP_ID, C_MAIL_ID)
+ Values
+   ('TIP_TIP3', 'TIP_TIP3_1');
+COMMIT;
