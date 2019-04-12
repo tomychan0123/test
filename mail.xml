@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xx.demog.dao.mail.MailRepository"> <!-- "com.xx.demog.dao.mail""com.xx.demog.dao.mail.MailRepository"> -->
+	<resultMap id="MailGroupMap" type="com.xx.demog.domain.mail.MailGroup" >
+        <id property="groupId" column="c_group_id"/>
+      	<result property="groupName" column="c_group_Name"/>
+    </resultMap>
+    <resultMap id="MailInfoMap" type="com.xx.demog.domain.mail.MailInfo">
+      <id property="mailId" column="c_Mail_id"/>
+      <result property="email" column="c_Mail"/>
+      <result property="userName" column="c_Name"/>
+      <result property="groupId" column="c_group_id"/>
+    </resultMap>
+
+    <resultMap id="EventMailMap" type="com.xx.demog.domain.mail.EventMail">
+      <id property="eventId" column="c_event_id"/>
+      <result property="eventName" column="c_event_name"/>
+      <result property="mailGroupId" column="c_mail_groupid"/>
+      <result property="updateUserId" column="c_upd_uid"/>
+      <result property="updateUserName" column="c_upd_user" />
+      <result property="updateDate" column="c_upd_date"/>
+      <result property="isBodyHtml" column="c_is_body_html"/>
+      <result property="sysId" column="c_sys_id"/>
+    </resultMap>
+    <resultMap id="EventMailFullMap" type="com.xx.demog.domain.mail.EventMail">
+      <id property="eventId" column="c_event_id"/>
+      <result property="eventName" column="c_event_name"/>
+      <result property="eventGroupId" column="c_event_groupid"/>
+      <result property="mailGroupId" column="c_mail_groupid"/>
+      <result property="updateUserId" column="c_upd_uid"/>
+      <result property="updateUserName" column="c_upd_user" />
+      <result property="updateDate" column="c_upd_date"/>
+      <result property="mailSubject" column="c_mail_subject"/>
+      <result property="mailTemplate" column="c_mail_template"/>
+      <result property="isBodyHtml" column="c_is_body_html"/>
+      <result property="sysId" column="c_sys_id"/>
+    </resultMap>
+    
+    <!-- 所有group 的資料 -->
+    <select id="SelectAllMailGroup" parameterType="java.lang.String" resultMap="MailGroupMap">
+       select c_group_id, c_group_Name
+         from svc_mailgroup
+    	<where>
+     		<if test="GroupId != null">c_group_id = #{groupId}</if>
+     	</where>
+    </select>
+
+    <!-- 查 Group 下的人員 -->
+    <select id="SelectMailInfoByGroupId" parameterType="java.lang.String" resultMap="MailInfoMap">
+      select b.c_Mail_id, b.c_Mail, b.c_Name, a.c_group_id
+        from svc_mailgroup a, svc_mail b, svc_mailgroup_item c
+       where c.c_Mail_id = b.c_Mail_id
+         and a.c_group_id = c.c_group_id
+         and a.c_group_id = #{groupId}
+       order by b.c_Mail_id
+    </select>
+
+    <!-- 查可加入的人員-->
+    <select id="SelectMailInfobyUse" parameterType="java.lang.String" resultMap="MailInfoMap">
+      select b.c_Mail_id, b.c_Mail, b.c_Name, #value# as c_group_id
+        from svc_mail b
+       where b.c_Mail_id not in (select c_Mail_id from svc_mailgroup_item where c_group_id = #{groupId})
+    </select>
+
+    <!-- insert Mail  Group data      -->
+    <insert id="InsMailGroup" parameterType="java.util.Map">
+      insert into svc_mailgroup(c_group_id, c_group_Name)
+      values (#{groupId}, #{groupName})
+    </insert>
+
+    <!--  update Mail  Group data      -->
+    <update id="UpdMailGroup">
+      update svc_mailgroup
+         set c_group_Name = #{groupName}
+       where c_group_id = #{groupId}
+    </update>
+
+    <!--  delete Mail Group data      -->
+    <delete id="DelMailGroup" parameterType="java.util.Map">
+      delete svc_mailgroup where c_group_id = #{groupId}
+    </delete> 
+
+    <!-- insert Mail  Group item  data      -->
+    <insert id="InsMailGroupItem" parameterType="java.util.Map">
+      insert into svc_mailgroup_item(c_group_id, c_Mail_id)
+      values (#{groupId}, #{mailId})
+    </insert>
+    <!--  delete Mail Group item data      -->
+    <delete id="DelMailGroupItem" parameterType="java.util.Map">
+      delete svc_mailgroup_item where c_group_id =  #{groupId} and c_Mail_id = #{mailId}
+    </delete>
+    <!--  delete Mail Group item data by mailid      -->
+    <delete id="DelMailGroupItemByMailId" parameterType="java.util.Map">
+      delete svc_mailgroup_item where c_Mail_id = #{mailId}
+    </delete>
+
+    
+    <!--  insert mailGroup user      -->
+    <insert id="InsMailInfo" parameterType="java.util.Map">
+      insert into svc_mail(c_Mail_id, c_Mail, c_Name)
+      values (#mailId#, #email#, #userName#)
+    </insert>
+
+    <!--  delete mailGroup user      -->
+    <delete id="DelMailInfo" parameterType="java.util.Map">
+      delete svc_mail where  c_Mail_id = #{mailId} and c_Mail = #{email}
+    </delete>
+
+    <!--  update mailGroup user      -->
+    <update id="UpdMailInfo" parameterType="java.util.Map">
+      update svc_mail
+         set c_Mail = #{email},
+             c_Name = #{userName}
+       where c_Mail_id = #{mailId}
+    </update>
+
+    
+    <!-- 所有group 的資料 -->
+    <!--  (select c_user_name from app_user where c_user_id = src.c_upd_uid) as c_upd_user, -->
+    <sql id="SelectAllEventMail">
+      select src.c_event_id,
+        	 src.c_event_groupid,
+        	 src.c_event_name,
+        	 src.c_mail_groupid,
+        	 src.c_upd_uid,
+        	 src.c_upd_uid as c_upd_user,
+        	 src.c_upd_date,
+        	 src.c_is_body_html,
+        	 src.c_sys_id
+        from svc_event_mail src
+    </sql>
+    <select id="SelectEventMailByEventGroup" parameterType="java.lang.String" resultMap="EventMailMap">
+      <!-- <include refid="SelectAllEventMail"/> -->
+      select src.c_event_id,
+        	 src.c_event_groupid,
+        	 src.c_event_name,
+        	 src.c_mail_groupid,
+        	 src.c_upd_uid,
+        	 src.c_upd_uid as c_upd_user,
+        	 src.c_upd_date,
+        	 src.c_is_body_html,
+        	 src.c_sys_id
+        from svc_event_mail src
+      where src.c_event_groupid = #{groupId}
+      order by src.c_event_id
+    </select>
+    <select id="SelectEventMailByEventId" parameterType="java.util.Map" resultMap="EventMailMap">
+      <!-- <include refid="SelectAllEventMail"/> -->
+      select src.c_event_id,
+        	 src.c_event_groupid,
+        	 src.c_event_name,
+        	 src.c_mail_groupid,
+        	 src.c_upd_uid,
+        	 src.c_upd_uid as c_upd_user,
+        	 src.c_upd_date,
+        	 src.c_is_body_html,
+        	 src.c_sys_id
+        from svc_event_mail src
+      where src.c_sys_id = #{sysId}
+        and src.c_event_id = #{eventId}
+    </select>
+    <select id="SelectEventMailFullByEventId" parameterType="java.util.Map" resultMap="EventMailFullMap">
+     select src.c_event_id,
+        	src.c_event_groupid,
+        	src.c_event_name,
+        	src.c_mail_groupid,
+        	src.c_upd_uid,
+        	src.c_upd_uid as c_upd_user,
+        	src.c_upd_date,
+        	src.c_mail_subject,
+        	src.c_mail_template,
+        	src.c_is_body_html,
+        	src.c_sys_id
+       from svc_event_mail src
+      where src.c_sys_id = #{sysId}
+        and src.c_event_id = #{eventId}
+    </select>
+    <update id="UpdateEventMail" parameterType="java.util.Map">
+      update  svc_event_mail src 
+         set  src.c_mail_groupid = #{mailGroupId},
+        	  src.c_upd_uid = #{updateUserId},
+              src.c_upd_date = #{updateDate}
+       where src.c_event_id = #{eventId}
+    </update>
+</mapper>
